@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "BEST=School" | tee >(source /dev/stdin)
+export BEST="School"
