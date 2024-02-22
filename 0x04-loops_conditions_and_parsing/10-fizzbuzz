@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script plays FizzBuzz, displaying numbers from 1 to 100,
+# but for multiples of 3 and 5, it displays FizzBuzz,
+# for multiples of 3, it displays Fizz,
+# and for multiples of 5, it displays Buzz.
+
+for i in {1..100}; do
+    if (( i % 3 == 0 && i % 5 == 0 )); then
+        echo "FizzBuzz"
+    elif (( i % 3 == 0 )); then
+        echo "Fizz"
+    elif (( i % 5 == 0 )); then
+        echo "Buzz"
+    else
+        echo "$i"
+    fi
+done
