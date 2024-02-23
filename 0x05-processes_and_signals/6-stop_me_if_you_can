@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Create a file that signals the 4-to_infinity_and_beyond script to stop
+touch /tmp/stop_signal
