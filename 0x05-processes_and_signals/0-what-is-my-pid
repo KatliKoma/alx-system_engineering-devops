@@ -1,2 +1,4 @@
 #!/bin/bash
+#prints own pid
+
 echo $$
