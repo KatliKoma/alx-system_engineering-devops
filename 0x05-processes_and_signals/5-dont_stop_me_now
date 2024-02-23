@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Script to stop the 4-to_infinity_and_beyond process
 
-# Find the PID of 4-to_infinity_and_beyond using ps and grep, then kill it
-PID=$(ps aux | grep './4-to_infinity_and_beyond' | grep -v grep | awk '{print $2}')
+# Use ps and grep to find the PID of the 4-to_infinity_and_beyond script
+PID=$(ps aux | grep '[4]-to_infinity_and_beyond' | awk '{print $2}')
 
-if [[ ! -z $PID ]]; then
-  kill $PID
+# If the PID was found, use kill to terminate the process
+if [[ -n $PID ]]; then
+  kill "$PID"
   echo "Process 4-to_infinity_and_beyond ($PID) has been terminated."
 else
   echo "Process 4-to_infinity_and_beyond not found."
