@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Fix Apache to return a page containing "Hello Holberton" when querying the root of the container
+
+apt-get update
+apt-get install -y apache2
+
+echo "Hello Holberton" > /var/www/html/index.html
+
+service apache2 restart
