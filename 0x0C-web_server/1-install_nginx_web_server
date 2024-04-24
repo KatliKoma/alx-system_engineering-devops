@@ -1,15 +1,9 @@
 #!/usr/bin/env bash
 # This script installs and configures Nginx web server
 
-# Update package index and install Nginx silently
 apt-get update -y
 apt-get install nginx -y
-
-# Modify Nginx default configuration to listen on port 80
-sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
-
-# Restart Nginx
-service nginx restart
-
-# Create index.html with "Hello World!" content
-echo "Hello World!" > /var/www/html/index.html
+sudo ufw allow "Nginx HTTP"
+sudo chown -R $USER:$USER /var/www/html/index.nginx-debian.html
+sudo echo "Hello World!" > /var/www/html/index.nginx-debian.html
+sudo service nginx restart
