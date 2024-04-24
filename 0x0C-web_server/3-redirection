@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# This script configures Nginx to perform a 301 redirect
+
+# Update package index and install Nginx silently
+apt-get update -y
+apt-get install nginx -y
+
+# Modify Nginx default configuration to perform a 301 redirect
+sed -i 's/location \/ {/location \/ {\n\treturn 301 https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4;\n/g' /etc/nginx/sites-available/default
+
+# Restart Nginx
+service nginx restart
