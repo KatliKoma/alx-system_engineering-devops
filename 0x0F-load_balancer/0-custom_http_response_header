@@ -2,24 +2,28 @@
 
 # This script configures a brand new Ubuntu machine to include a custom HTTP response header in Nginx
 
-# Update package lists and install Nginx
+# Updating Packages before performing installations
 sudo apt-get update
 sudo apt-get install -y nginx
 
-# Allow HTTP traffic through UFW for Nginx
-sudo ufw allow 'Nginx HTTP'
-
-# Create index.html with "Hello World!" content
+# Creating an index.html page
 echo "Hello World!" | sudo tee /var/www/html/index.html
 
-# Configure Nginx to handle custom HTTP response header and custom 404 error page
-sudo sed -i "s/server_name _;/server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/besthor permanent;/" /etc/nginx/sites-enabled/default
+# Performing a "moved permanently redirection" (301)
+new_string="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/besthor permanent;"
+sudo sed -i "s/server_name _;/$new_string/" /etc/nginx/sites-enabled/default
+
+# Creating a 404 Custom error page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+new_string="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+
+sudo sed -i "s/listen 80 default_server;/$new_string/" /etc/nginx/sites-enabled/default
+
+# Creating an HTTP response header
 sudo sed -i "/server_name _/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
 
-# Create custom 404 error page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
-sudo sed -i "s/listen 80 default_server;/listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}/" /etc/nginx/sites-enabled/default
-
-# Perform syntax check on Nginx configuration and restart Nginx service
+# Testing configurations for syntax errors
 sudo nginx -t
+
+# Restart nginx after implementing changes
 sudo service nginx restart
