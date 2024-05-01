@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Install necessary tools for debugging
+apt-get update
+apt-get install -y net-tools lsof
+
+# Check if anything is already listening on port 80
+port_in_use=$(lsof -i :80 | grep LISTEN)
+
+if [ -n "$port_in_use" ]; then
+    echo "Port 80 is already in use by another process:"
+    echo "$port_in_use"
+    exit 1
+fi
+
+# Check Nginx configuration
+nginx_config='/etc/nginx/sites-available/default'
+
+# Ensure Nginx is configured to listen on port 80
+sed -i 's/80 default_server/80/' $nginx_config
+
+# Restart Nginx to apply changes
+service nginx restart
+
+# Check if Nginx is now listening on port 80
+nginx_status=$(netstat -tuln | grep ':80')
+
+if [ -z "$nginx_status" ]; then
+    echo "Failed to make Nginx listen on port 80"
+    exit 1
+fi
+
+echo "Nginx is now listening on port 80"
