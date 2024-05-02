@@ -1,5 +1,5 @@
-#!/bin/bash
-# Function to display information about a specific subdomain
+#!/usr/bin/env bash
+# Script that displays information about subdomains.
 
 domain=${1}
 subdomains=(${2:-www lb-01 web-01 web-02})
