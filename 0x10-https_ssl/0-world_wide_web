@@ -1,26 +1,13 @@
 #!/bin/bash
-
 # Function to display information about a specific subdomain
-get_subdomain_info() {
-    domain="$1"
-    subdomain="$2"
-    dig_output=$(dig "$subdomain.$domain" | awk '/ANSWER SECTION:/ {getline; print}')
-    record_type=$(echo "$dig_output" | awk '{print $4}')
-    destination=$(echo "$dig_output" | awk '{print $5}')
-    echo "The subdomain $subdomain is a $record_type record and points to $destination"
+
+domain=${1}
+subdomains=(${2:-www lb-01 web-01 web-02})
+
+subdomain_data() {
+	dig "${1}.${2}" | awk -v subdomain="${1}" '/ANSWER SECTION:/ { getline; print "The subdomain", subdomain, "is a", $4, "record and points to", $5 }'
 }
 
-# Main script
-domain="$1"
-subdomain="$2"
-
-if [ -z "$subdomain" ]; then
-    # Display information for default subdomains
-    default_subdomains=("www" "lb-01" "web-01" "web-02")
-    for sub in "${default_subdomains[@]}"; do
-        get_subdomain_info "$domain" "$sub"
-    done
-else
-    # Display information for the specified subdomain
-    get_subdomain_info "$domain" "$subdomain"
-fi
+for subdomain in "${subdomains[@]}"; do
+	subdomain_data "$subdomain" "$domain"
+done
